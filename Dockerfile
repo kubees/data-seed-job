@@ -11,6 +11,9 @@ RUN go build -o app main.go
 
 FROM alpine:3.12
 
-RUN mkdir -p /app
-COPY --from=build /src/app /app/app
-CMD ["./app/app"]
+WORKDIR /app
+RUN mkdir /videos-seed && mkdir playlist-seed
+COPY --from=build /src/app ./app
+COPY --from=build /src/videos-seed/videos.json ./videos-seed/videos.json
+COPY --from=build /src/playlist-seed/playlists.json ./playlist-seed/playlists.json
+CMD ["./app"]
