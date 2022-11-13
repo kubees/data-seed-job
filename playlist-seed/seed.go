@@ -10,24 +10,24 @@ import (
 )
 
 func SeedPlaylistsData(client *redis.Client, ctx context.Context) {
-	playlists, err := getPlaylistsFromJson()
+	playlistsJson, err := getPlaylistsFromJson()
 	if err != nil {
 		return
 	}
-	err = client.Set(ctx, "playlists", playlists, 0).Err()
+	err = client.Set(ctx, "playlists", playlistsJson, 0).Err()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 }
 
-func getPlaylistsFromJson() ([]Playlist, error) {
+func getPlaylistsFromJson() ([]byte, error) {
 	// Open our jsonFile
 	jsonFile, err := os.Open("playlist-seed/playlists.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
-		return []Playlist{}, err
+		return []byte{}, err
 	}
 	fmt.Println("Successfully Opened playlists.json")
 	// defer the closing of our jsonFile so that we can parse it later on
@@ -45,7 +45,7 @@ func getPlaylistsFromJson() ([]Playlist, error) {
 	err = json.Unmarshal(byteValue, &playlists)
 	if err != nil {
 		fmt.Println(err)
-		return []Playlist{}, err
+		return []byte{}, err
 	}
-	return playlists, nil
+	return byteValue, nil
 }

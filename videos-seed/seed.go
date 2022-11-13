@@ -16,7 +16,12 @@ func SeedVideosData(client *redis.Client, ctx context.Context) {
 	}
 	fmt.Println(videos)
 	for _, video := range videos {
-		err = client.Set(ctx, video.Id, video, 0).Err()
+		videoJson, err := json.Marshal(video)
+		if err != nil {
+			fmt.Println("Error while marshaling")
+			return
+		}
+		err = client.Set(ctx, video.Id, videoJson, 0).Err()
 		if err != nil {
 			fmt.Println(err)
 			return
