@@ -28,4 +28,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ahmedgrati/playlist-ms:${{ github.sha }}
+          tags: ahmedgrati/data-seed-job:${{ github.sha }}
