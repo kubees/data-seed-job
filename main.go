@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-redis/redis/v8"
 	playlist "github.com/kubees/data-seed-job/playlist-seed"
+	videos "github.com/kubees/data-seed-job/videos-seed"
 	"os"
 )
 
@@ -22,5 +23,7 @@ func main() {
 
 	if microservice == "playlist" {
 		playlist.SeedPlaylistsData(client, ctx)
+	} else if microservice == "videos" {
+		videos.SeedVideosData(client, ctx)
 	}
 }
