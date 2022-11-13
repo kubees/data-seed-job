@@ -14,6 +14,7 @@ func SeedVideosData(client *redis.Client, ctx context.Context) {
 	if err != nil {
 		return
 	}
+	fmt.Println(videos)
 	for _, video := range videos {
 		err = client.Set(ctx, video.Id, video, 0).Err()
 		if err != nil {
