@@ -19,7 +19,8 @@ func main() {
 	})
 	client = r
 	ctx := context.Background()
-	//if microservice == "playlist" {
-	playlist.SeedPlaylistsData(client, ctx)
-	//}
+
+	if microservice == "playlist" {
+		playlist.SeedPlaylistsData(client, ctx)
+	}
 }
