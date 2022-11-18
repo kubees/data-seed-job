@@ -11,12 +11,14 @@ import (
 var microservice = os.Getenv("MICROSERVICE")
 var redisHost = os.Getenv("REDIS_HOST")
 var redisPort = os.Getenv("REDIS_PORT")
+var password = os.Getenv("PASSWORD")
 var client *redis.Client
 
 func main() {
 	r := redis.NewClient(&redis.Options{
 		Addr: redisHost + ":" + redisPort,
 		DB:   0,
+		Password: password,
 	})
 	client = r
 	ctx := context.Background()
