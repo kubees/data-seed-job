@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	playlist "github.com/kubees/data-seed-job/playlist-seed"
 	videos "github.com/kubees/data-seed-job/videos-seed"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -16,16 +17,20 @@ var client *redis.Client
 
 func main() {
 	r := redis.NewClient(&redis.Options{
-		Addr: redisHost + ":" + redisPort,
-		DB:   0,
+		Addr:     redisHost + ":" + redisPort,
+		DB:       0,
 		Password: password,
 	})
 	client = r
 	ctx := context.Background()
-
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+	sugar := logger.Sugar()
 	if microservice == "playlist" {
+		sugar.Infow("Seeding Data into playlists database")
 		playlist.SeedPlaylistsData(client, ctx)
 	} else if microservice == "videos" {
+		sugar.Infow("Seeding Data into videos database")
 		videos.SeedVideosData(client, ctx)
 	}
 }
