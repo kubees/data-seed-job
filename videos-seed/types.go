@@ -11,5 +11,5 @@ type Videos struct {
 }
 
 type VideosSeed struct {
-	logger zap.SugaredLogger
+	Logger *zap.SugaredLogger
 }

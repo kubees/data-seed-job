@@ -28,9 +28,15 @@ func main() {
 	sugar := logger.Sugar()
 	if microservice == "playlist" {
 		sugar.Infow("Seeding Data into playlists database")
-		playlist.SeedPlaylistsData(client, ctx)
+		playlistSeed := playlist.PlaylistSeed{
+			Logger: sugar,
+		}
+		playlistSeed.SeedPlaylistsData(client, ctx)
 	} else if microservice == "videos" {
 		sugar.Infow("Seeding Data into videos database")
-		videos.SeedVideosData(client, ctx)
+		videosSeed := videos.VideosSeed{
+			Logger: sugar,
+		}
+		videosSeed.SeedVideosData(client, ctx)
 	}
 }

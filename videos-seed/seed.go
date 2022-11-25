@@ -11,19 +11,19 @@ import (
 func (videosSeed *VideosSeed) SeedVideosData(client *redis.Client, ctx context.Context) {
 	videos, err := videosSeed.getVideosFromJson()
 	if err != nil {
-		videosSeed.logger.Errorw("Error while trying to get videos from JSON", err)
+		videosSeed.Logger.Errorw("Error while trying to get videos from JSON", err)
 		return
 	}
-	videosSeed.logger.Infow("Videos fetched successfully from the JSON", videos)
+	videosSeed.Logger.Infow("Videos fetched successfully from the JSON", videos)
 	for _, video := range videos {
 		videoJson, err := json.Marshal(video)
 		if err != nil {
-			videosSeed.logger.Errorw("Error while marshalling video to JSON", err)
+			videosSeed.Logger.Errorw("Error while marshalling video to JSON", err)
 			return
 		}
 		err = client.Set(ctx, video.Id, videoJson, 0).Err()
 		if err != nil {
-			videosSeed.logger.Errorw("Error while Updating database with video", err)
+			videosSeed.Logger.Errorw("Error while Updating database with video", err)
 			return
 		}
 	}
@@ -34,15 +34,15 @@ func (videosSeed *VideosSeed) getVideosFromJson() ([]Videos, error) {
 	jsonFile, err := os.Open("videos-seed/videos.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
-		videosSeed.logger.Errorw("Error while opening the videos json file", err)
+		videosSeed.Logger.Errorw("Error while opening the videos json file", err)
 		return []Videos{}, err
 	}
-	videosSeed.logger.Infow("Successfully Opened videos.json")
+	videosSeed.Logger.Infow("Successfully Opened videos.json")
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer func(jsonFile *os.File) {
 		err := jsonFile.Close()
 		if err != nil {
-			videosSeed.logger.Errorw("Error while closing the videos json file", err)
+			videosSeed.Logger.Errorw("Error while closing the videos json file", err)
 		}
 	}(jsonFile)
 
@@ -52,7 +52,7 @@ func (videosSeed *VideosSeed) getVideosFromJson() ([]Videos, error) {
 
 	err = json.Unmarshal(byteValue, &videos)
 	if err != nil {
-		videosSeed.logger.Errorw("Error while unmarshalling the json file", err)
+		videosSeed.Logger.Errorw("Error while unmarshalling the json file", err)
 		return []Videos{}, err
 	}
 	return videos, nil
